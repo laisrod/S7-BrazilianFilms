@@ -1,0 +1,55 @@
+.movie-card {
+  background: linear-gradient(135deg, #006b3c 0%, #008f39 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid #ffd700;
+  position: relative;
+  overflow: hidden;
+}
+
+.movie-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3);
+  border-color: #ffed4e;
+}
+
+.movie-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.movie-card__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffd700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.movie-card__year {
+  font-size: 0.95rem;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.movie-card__label {
+  font-weight: 600;
+  color: #ffed4e;
+}
+
