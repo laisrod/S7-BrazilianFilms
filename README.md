@@ -28,14 +28,14 @@ src/
         └── moviesSlice.js
 ```
 
-## Exercício 1 - Implementado ✅
+## Implementado
 
-- ✅ Tela principal com lista completa de filmes brasileiros
-- ✅ Exibição de **Nome** e **Ano** de cada filme
-- ✅ Layout com cores verde e amarelo (bandeira brasileira)
-- ✅ Redux Toolkit para gerenciamento de estado
-- ✅ Componentes criados com Storybook
-- ✅ Design responsivo e moderno
+- Tela principal com lista completa de filmes brasileiros
+- Exibição de **Nome** e **Ano** de cada filme
+- Layout com cores verde e amarelo (bandeira brasileira)
+- Redux Toolkit para gerenciamento de estado
+- Componentes criados com Storybook
+- Design responsivo e moderno
 
 ## Paleta de Cores
 
