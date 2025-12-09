@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { loadMovies } from '../../store/slices/moviesSlice'
 import MovieList from '../../components/MovieList/MovieList'
+import MovieSearch from '../../components/MovieSearch/MovieSearch'
 import './Home.css'
 
 const Home = () => {
@@ -18,6 +19,7 @@ const Home = () => {
         <p className="home__subtitle">Descubra os grandes clássicos do cinema nacional</p>
       </header>
       <main className="home__main">
+        <MovieSearch />
         <MovieList />
       </main>
     </div>
