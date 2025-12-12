@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux'
 import MovieCard from '../MovieCard/MovieCard'
-import './MovieList.css'
+import '../../styles/MovieList.css'
+import type { RootState } from '../../types'
 
 const MovieList = () => {
-  const { movies, loading, error } = useSelector((state) => state.movies)
+  const { movies, loading, error } = useSelector((state: RootState) => state.movies)
 
   if (loading) {
     return (
@@ -29,15 +30,21 @@ const MovieList = () => {
     )
   }
 
+  console.log('Movies no MovieList:', movies) // Debug
+
   return (
     <div className="movie-list" data-testid="movie-list">
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          name={movie.name}
-          model={movie.model}
-        />
-      ))}
+      {movies.map((movie, index) => {
+        console.log(`Movie ${index}:`, movie) // Debug
+        return (
+          <MovieCard
+            key={movie.id || index}
+            id={movie.id}
+            name={movie.name}
+            model={movie.model}
+          />
+        )
+      })}
     </div>
   )
 }
