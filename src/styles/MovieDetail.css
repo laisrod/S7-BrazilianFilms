@@ -1,0 +1,115 @@
+.movie-detail {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #006b3c 0%, #008f39 100%);
+  padding: 2rem;
+}
+
+.movie-detail__loading,
+.movie-detail__error,
+.movie-detail__not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #ffd700;
+  font-size: 1.2rem;
+}
+
+.movie-detail__back-button {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: #006b3c;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-detail__back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
+}
+
+.movie-detail__back-button:active {
+  transform: translateY(0);
+}
+
+.movie-detail__container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.movie-detail__header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #ffd700;
+}
+
+.movie-detail__title {
+  color: #006b3c;
+  font-size: 2.5rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.movie-detail__content {
+  margin-top: 2rem;
+}
+
+.movie-detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movie-detail__field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 107, 60, 0.05);
+  border-radius: 8px;
+  border-left: 4px solid #ffd700;
+}
+
+.movie-detail__label {
+  font-weight: 600;
+  color: #006b3c;
+  font-size: 1.1rem;
+}
+
+.movie-detail__value {
+  color: #333;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .movie-detail {
+    padding: 1rem;
+  }
+
+  .movie-detail__container {
+    padding: 1.5rem;
+  }
+
+  .movie-detail__title {
+    font-size: 2rem;
+  }
+
+  .movie-detail__field {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+

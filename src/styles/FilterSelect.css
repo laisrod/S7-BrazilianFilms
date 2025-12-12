@@ -1,0 +1,46 @@
+.filter-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-select__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffd700;
+  margin-bottom: 0.25rem;
+}
+
+.filter-select__select {
+  padding: 0.75rem;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #006b3c;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23006b3c' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+}
+
+.filter-select__select:focus {
+  outline: none;
+  border-color: #ffed4e;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+  background-color: #ffffff;
+}
+
+.filter-select__select:hover {
+  border-color: #ffed4e;
+}
+
+.filter-select__select option {
+  background-color: #ffffff;
+  color: #006b3c;
+  padding: 0.5rem;
+}
+
