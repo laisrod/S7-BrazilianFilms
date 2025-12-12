@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { loadMovies } from '../../store/slices/moviesSlice'
+import { loadMovies, resetMovies } from '../../store/slices/moviesSlice'
 import MovieList from '../../components/MovieList/MovieList'
 import FilterBar from '../../components/FilterBar/FilterBar'
 import '../../styles/Home.css'
@@ -10,6 +10,8 @@ const Home = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
+    //resete os filmes antes de carregar a primeira pagina
+    dispatch(resetMovies())
     dispatch(loadMovies(1))
   }, [dispatch])
 

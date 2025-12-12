@@ -101,6 +101,17 @@ const moviesSlice = createSlice({
       // Restaura todos os filmes quando limpa os filtros
       state.movies = [...state.allMovies]
     },
+    resetMovies: (state) => {
+      state.allMovies = []
+      state.movies = []
+      state.nextPage = null
+      state.previousPage = null
+      state.filters = {
+        search: '',
+        genre: '',
+        year: '',
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -111,10 +122,16 @@ const moviesSlice = createSlice({
       .addCase(loadMovies.fulfilled, (state, action) => {
         state.loading = false
         console.log('Dados recebidos no Redux:', action.payload.results) // Debug
-        // Salva todos os filmes carregados
-        state.allMovies = action.payload.results
-        // Aplica filtros aos filmes carregados
-        state.movies = applyFilters(action.payload.results, state.filters)
+
+        const isFirstPage = action.payload.previous ===null || action.payload.previous === 1
+        if (isFirstPage){
+          state.allMovies = action.payload.results
+        } else {
+          state.allMovies = [...state.allMovies, ...action.payload.results]
+        }
+
+        // Aplica filtros aos filmes acumulados
+        state.movies = applyFilters(state.allMovies, state.filters)
         state.nextPage = action.payload.next
         state.previousPage = action.payload.previous
       })
@@ -143,6 +160,7 @@ export const {
   setGenreFilter,
   setYearFilter,
   clearFilters,
+  resetMovies,
 } = moviesSlice.actions
 
 export default moviesSlice.reducer

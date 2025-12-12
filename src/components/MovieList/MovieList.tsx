@@ -1,12 +1,21 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import MovieCard from '../MovieCard/MovieCard'
 import '../../styles/MovieList.css'
 import type { RootState } from '../../types'
+import type { AppDispatch } from '../../store/store'
+import { loadMovies } from '../../store/slices/moviesSlice'
 
 const MovieList = () => {
-  const { movies, loading, error } = useSelector((state: RootState) => state.movies)
+  const dispatch = useDispatch<AppDispatch>()
+  const { movies, loading, error, nextPage } = useSelector((state: RootState) => state.movies)
 
-  if (loading) {
+  const handleLoadMore = () => {
+    if (nextPage && !loading) {
+      dispatch(loadMovies(nextPage))
+    }
+  }
+
+  if (loading && movies.length === 0) {
     return (
       <div className="movie-list__loading" data-testid="movie-list-loading">
         <p>Carregando filmes...</p>
@@ -30,12 +39,9 @@ const MovieList = () => {
     )
   }
 
-  console.log('Movies no MovieList:', movies) // Debug
-
   return (
     <div className="movie-list" data-testid="movie-list">
       {movies.map((movie, index) => {
-        console.log(`Movie ${index}:`, movie) // Debug
         return (
           <MovieCard
             key={movie.id || index}
@@ -45,9 +51,21 @@ const MovieList = () => {
           />
         )
       })}
+
+      {/* BOTÃO "VER MAIS" */}
+      {nextPage && (
+        <div className="movie-list__load-more">
+          <button
+            onClick={handleLoadMore}
+            disabled={loading}
+            className="movie-list__load-more-button"
+          >
+            {loading ? 'Carregando...' : 'Ver Mais'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
 
 export default MovieList
-

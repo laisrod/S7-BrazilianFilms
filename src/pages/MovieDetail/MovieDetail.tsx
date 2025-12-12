@@ -27,13 +27,36 @@ const MovieDetail = () => {
     }
   }, [id, dispatch])
 
-  const handleBack = () => {
-    navigate(-1)
+  // Função para voltar à página inicial
+  const handleGoHome = () => {
+    navigate('/')
   }
 
   if (loadingDetails) {
     return (
       <div className="movie-detail">
+        <button 
+          onClick={handleGoHome} 
+          className="movie-detail__back-button"
+          type="button"
+          style={{
+            display: 'block',
+            position: 'relative',
+            zIndex: 1000,
+            marginBottom: '1rem',
+            padding: '0.75rem 1.5rem',
+            backgroundColor: '#ffd700',
+            color: '#006b3c',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          ← Voltar à Página Inicial
+        </button>
         <div className="movie-detail__loading" data-testid="movie-detail-loading">
           <p>Carregando detalhes do filme...</p>
         </div>
@@ -44,11 +67,30 @@ const MovieDetail = () => {
   if (errorDetails) {
     return (
       <div className="movie-detail">
+        <button 
+          onClick={handleGoHome} 
+          className="movie-detail__back-button"
+          type="button"
+          style={{
+            display: 'block',
+            position: 'relative',
+            zIndex: 1000,
+            marginBottom: '1rem',
+            padding: '0.75rem 1.5rem',
+            backgroundColor: '#ffd700',
+            color: '#006b3c',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          ← Voltar à Página Inicial
+        </button>
         <div className="movie-detail__error" data-testid="movie-detail-error">
           <p>Erro ao carregar filme: {errorDetails}</p>
-          <button onClick={handleBack} className="movie-detail__back-button">
-            Voltar
-          </button>
         </div>
       </div>
     )
@@ -57,11 +99,30 @@ const MovieDetail = () => {
   if (!currentMovie) {
     return (
       <div className="movie-detail">
+        <button 
+          onClick={handleGoHome} 
+          className="movie-detail__back-button"
+          type="button"
+          style={{
+            display: 'block',
+            position: 'relative',
+            zIndex: 1000,
+            marginBottom: '1rem',
+            padding: '0.75rem 1.5rem',
+            backgroundColor: '#ffd700',
+            color: '#006b3c',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          ← Voltar à Página Inicial
+        </button>
         <div className="movie-detail__not-found" data-testid="movie-detail-not-found">
           <p>Filme não encontrado</p>
-          <button onClick={handleBack} className="movie-detail__back-button">
-            Voltar
-          </button>
         </div>
       </div>
     )
@@ -69,8 +130,27 @@ const MovieDetail = () => {
 
   return (
     <div className="movie-detail" data-testid="movie-detail">
-      <button onClick={handleBack} className="movie-detail__back-button">
-        ← Voltar
+      <button 
+        onClick={handleGoHome} 
+        className="movie-detail__back-button"
+        type="button"
+        style={{
+          display: 'block',
+          position: 'relative',
+          zIndex: 1000,
+          marginBottom: '1rem',
+          padding: '0.75rem 1.5rem',
+          backgroundColor: '#ffd700',
+          color: '#006b3c',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '1rem',
+          fontWeight: '600',
+          cursor: 'pointer',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        ← Voltar à Página Inicial
       </button>
       <div className="movie-detail__container">
         <div className="movie-detail__header">
@@ -102,4 +182,3 @@ const MovieDetail = () => {
 }
 
 export default MovieDetail
-
