@@ -1,5 +1,7 @@
+import type { Movie, MoviesResponse, FilterOptions } from '../types'
+
 // Dados mockados de filmes brasileiros famosos
-const BRAZILIAN_MOVIES = [
+const BRAZILIAN_MOVIES: Movie[] = [
   {
     id: 1,
     name: 'Cidade de Deus',
@@ -107,19 +109,15 @@ const BRAZILIAN_MOVIES = [
   },
 ]
 
-/**
- * Simula uma chamada de API com delay
- * @param {number} ms - Milissegundos de delay
- * @returns {Promise}
- */
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms))
 
 /**
  * Busca lista de filmes brasileiros
- * @param {number} page - Número da página (padrão: 1)
- * @returns {Promise<Object>} - Resposta com lista de filmes
+ * @param page - Número da página (padrão: 1)
+ * @returns Resposta com lista de filmes
  */
-export const fetchMovies = async (page = 1) => {
+export const fetchMovies = async (page: number = 1): Promise<MoviesResponse> => {
   try {
     // Simula delay de rede
     await delay(500)
@@ -145,14 +143,14 @@ export const fetchMovies = async (page = 1) => {
 
 /**
  * Busca detalhes de um filme específico
- * @param {string} id - ID do filme
- * @returns {Promise<Object>} - Detalhes do filme
+ * @param id - ID do filme
+ * @returns Detalhes do filme
  */
-export const fetchMovieById = async (id) => {
+export const fetchMovieById = async (id: string | number): Promise<Movie> => {
   try {
     await delay(300)
 
-    const movie = BRAZILIAN_MOVIES.find((m) => m.id === parseInt(id))
+    const movie = BRAZILIAN_MOVIES.find((m) => m.id === parseInt(String(id)))
 
     if (!movie) {
       throw new Error('Filme não encontrado')
@@ -162,6 +160,22 @@ export const fetchMovieById = async (id) => {
   } catch (error) {
     console.error('Erro ao buscar filme:', error)
     throw error
+  }
+}
+
+/**
+ * Obtém opções de filtros disponíveis (gêneros e anos únicos)
+ * @returns Objeto com arrays de opções de gêneros e anos
+ */
+export const getFilterOptions = (): FilterOptions => {
+  const genres = [...new Set(BRAZILIAN_MOVIES.map((movie) => movie.genre))].sort()
+  const years = [...new Set(BRAZILIAN_MOVIES.map((movie) => movie.model))].sort(
+    (a, b) => parseInt(a) - parseInt(b)
+  )
+
+  return {
+    genres: genres.map((genre) => ({ value: genre, label: genre })),
+    years: years.map((year) => ({ value: year, label: year })),
   }
 }
 
