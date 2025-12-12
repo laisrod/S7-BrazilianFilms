@@ -1,6 +1,7 @@
+import type { Meta, StoryObj } from '@storybook/react'
 import MovieCard from './MovieCard'
 
-export default {
+const meta: Meta<typeof MovieCard> = {
   title: 'Components/MovieCard',
   component: MovieCard,
   tags: ['autodocs'],
@@ -9,22 +10,28 @@ export default {
   },
 }
 
-export const Default = {
+export default meta
+type Story = StoryObj<typeof MovieCard>
+
+export const Default: Story = {
   args: {
+    id: 1,
     name: 'Cidade de Deus',
     model: '2002',
   },
 }
 
-export const AutoDaCompadecida = {
+export const AutoDaCompadecida: Story = {
   args: {
+    id: 2,
     name: 'O Auto da Compadecida',
     model: '2000',
   },
 }
 
-export const CentralDoBrasil = {
+export const CentralDoBrasil: Story = {
   args: {
+    id: 3,
     name: 'Central do Brasil',
     model: '1998',
   },
