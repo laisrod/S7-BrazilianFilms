@@ -5,6 +5,7 @@ export interface Movie {
   model: string
   director: string
   genre: string
+  image?: string
 }
 
 // Tipos para resposta da API de filmes

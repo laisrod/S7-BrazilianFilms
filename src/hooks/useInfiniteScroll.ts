@@ -1,41 +1,49 @@
 import { useEffect, useRef } from 'react'
 
 interface UseInfiniteScrollOptions {
-    callback: () => void
-    hasMore: boolean
-    loading: boolean
-    threshold?: number
+  callback: () => void      // Função a ser chamada quando chegar ao final
+  hasMore: boolean          // Se há mais itens para carregar
+  loading: boolean          // Se está carregando
+  threshold?: number        // Porcentagem de visibilidade (0 a 1)
 }
 
 export const useInfiniteScroll = ({
-    callback,
-    hasMore,
-    loading,
-    threshold = 0.1,  
+  callback,
+  hasMore,
+  loading,
+  threshold = 0.1,
 }: UseInfiniteScrollOptions) => {
-    const observerTarget = useRef<HTMLDivElement>(null)
+  const observerTarget = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        if (!hasMore || loading) return
+  useEffect(() => {
+    // Se não há mais itens ou está carregando, não faz nada
+    if (!hasMore || loading) return
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    callback()
-                }
-            })
-        }, { threshold }) 
+    // Cria o IntersectionObserver
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Se o elemento está visível
+          if (entry.isIntersecting) {
+            callback()  // Chama a função de carregar mais
+          }
+        })
+      },
+      { threshold }  
+    )
 
-        if (observerTarget.current) {
-            observer.observe(observerTarget.current)
-        }
+    // Observa o elemento alvo
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current)
+    }
 
-        return () => {
-            if (observerTarget.current) {
-                observer.unobserve(observerTarget.current)
-            }
-        }
-    }, [callback, hasMore, loading, threshold])
+    // Limpeza: para de observar quando o componente desmonta
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current)
+      }
+    }
+  }, [callback, hasMore, loading, threshold])
 
-    return observerTarget
+  return observerTarget  // Retorna a referência do elemento
 }

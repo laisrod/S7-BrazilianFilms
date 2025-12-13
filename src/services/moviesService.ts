@@ -1,5 +1,19 @@
 import type { Movie, MoviesResponse, FilterOptions } from '../types'
 
+// Função auxiliar para gerar caminho da imagem
+const getImagePath = (movieName: string): string => {
+  // Remove acentos e caracteres especiais, converte para minúsculas
+  const normalizedName = movieName
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]/g, '')
+  
+  // Retorna o caminho da imagem
+  // Se a imagem não existir, o onError no componente usará placeholder
+  return `/image/${normalizedName}.jpg`
+}
+
 // Dados mockados de filmes brasileiros famosos
 const BRAZILIAN_MOVIES: Movie[] = [
   {
@@ -8,6 +22,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2002',
     director: 'Fernando Meirelles',
     genre: 'Drama',
+    image: '/image/cidadededeus.png',
   },
   {
     id: 2,
@@ -15,6 +30,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2000',
     director: 'Guel Arraes',
     genre: 'Comédia',
+    image: '/image/autodacompadecida.jpg',
   },
   {
     id: 3,
@@ -22,6 +38,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '1998',
     director: 'Walter Salles',
     genre: 'Drama',
+    image: '/image/centraldobrasil.webp',
   },
   {
     id: 4,
@@ -29,6 +46,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2007',
     director: 'José Padilha',
     genre: 'Ação',
+    image: '/image/tropadeelite.jpg',
   },
   {
     id: 5,
@@ -36,6 +54,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '1976',
     director: 'Bruno Barreto',
     genre: 'Comédia',
+    image: '/image/donafloreseusdoismaridos.jpg',
   },
   {
     id: 6,
@@ -43,6 +62,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2015',
     director: 'Anna Muylaert',
     genre: 'Drama',
+    image: '/image/quehoraselavolta.jpg',
   },
   {
     id: 7,
@@ -50,6 +70,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '1962',
     director: 'Anselmo Duarte',
     genre: 'Drama',
+    image: '/image/opagadordepromessas.jpg',
   },
   {
     id: 8,
@@ -57,13 +78,15 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2019',
     director: 'Kleber Mendonça Filho',
     genre: 'Suspense',
+    image: '/image/bacurau.jpg',
   },
   {
     id: 9,
-    name: 'O Que É Isso, Companheiro?',
-    model: '1997',
-    director: 'Bruno Barreto',
+    name: 'Ainda Estou Aqui',
+    model: '2025',
+    director: 'Marcos Prado',
     genre: 'Drama',
+    image: '/image/aindaestouaqui.jpg',
   },
   {
     id: 10,
@@ -71,6 +94,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2002',
     director: 'Hector Babenco',
     genre: 'Drama',
+    image: '/image/carandiru.webp',
   },
   {
     id: 11,
@@ -78,6 +102,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2003',
     director: 'Guel Arraes',
     genre: 'Comédia',
+    image: '/image/lisbelaeoprisioneiro.jpg',
   },
   {
     id: 12,
@@ -85,6 +110,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2003',
     director: 'Jorge Furtado',
     genre: 'Comédia',
+    image: '/image/ohomemquecopiava.jpg',
   },
   {
     id: 13,
@@ -92,6 +118,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2007',
     director: 'Marcos Jorge',
     genre: 'Drama',
+    image: '/image/estomago.jpg',
   },
   {
     id: 14,
@@ -99,13 +126,15 @@ const BRAZILIAN_MOVIES: Movie[] = [
     model: '2011',
     director: 'Selton Mello',
     genre: 'Comédia',
+    image: '/image/opalhaco.jpeg',
   },
   {
     id: 15,
-    name: 'Hoje Eu Quero Voltar Sozinho',
-    model: '2014',
-    director: 'Daniel Ribeiro',
+    name: 'O Agente Secreto',
+    model: '2025',
+    director: 'Kleber Mendonça Filho',
     genre: 'Romance',
+    image: '/image/oagente.jpg',
   },
 ]
 

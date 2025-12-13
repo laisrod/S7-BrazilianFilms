@@ -122,11 +122,13 @@ const moviesSlice = createSlice({
       .addCase(loadMovies.fulfilled, (state, action) => {
         state.loading = false
         console.log('Dados recebidos no Redux:', action.payload.results) // Debug
-
+        //verifica se é a primeira
         const isFirstPage = action.payload.previous ===null || action.payload.previous === 1
         if (isFirstPage){
+          //se é a primeira pagina, substitui todos os filmes
           state.allMovies = action.payload.results
         } else {
+          //se não é a primeira pagina, acumula os filmes
           state.allMovies = [...state.allMovies, ...action.payload.results]
         }
 
