@@ -48,6 +48,7 @@ const MovieList = () => {
             id={movie.id}
             name={movie.name}
             model={movie.model}
+            image={movie.image}
           />
         )
       })}

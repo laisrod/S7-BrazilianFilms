@@ -1,0 +1,143 @@
+.register {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #006b3c 0%, #008f39 100%);
+  padding: 2rem;
+  padding-top: 6rem;
+}
+
+.register__container {
+  max-width: 450px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 2px solid #ffd700;
+}
+
+.register__title {
+  font-size: 2.5rem;
+  color: #006b3c;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.register__subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.register__error {
+  background: #ff4444;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.register__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.register__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.register__label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #006b3c;
+}
+
+.register__input {
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.register__input:focus {
+  outline: none;
+  border-color: #006b3c;
+  box-shadow: 0 0 0 3px rgba(0, 107, 60, 0.1);
+}
+
+.register__input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.register__button {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #006b3c;
+  border: 2px solid #006b3c;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+}
+
+.register__button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.register__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.register__link-text {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.register__link {
+  color: #006b3c;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register__link:hover {
+  color: #008f39;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .register__container {
+    padding: 2rem 1.5rem;
+  }
+
+  .register__title {
+    font-size: 2rem;
+  }
+
+  .register__subtitle {
+    font-size: 1rem;
+  }
+}
+

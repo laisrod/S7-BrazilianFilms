@@ -1,0 +1,47 @@
+.welcome {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #006b3c 0%, #008f39 100%);
+    padding: 2rem;
+    padding-top: 6rem;
+}
+
+.welcome__container{
+    text-align: center;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    background-image: url('../../public/image/bandeira.png');
+
+}
+
+.welcome__title {
+    font-size: 3rem;
+    color: #006b3c;
+    margin-bottom: 1rem;
+}
+
+.welcome__subtitle {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+.welcome__button {
+    padding: 1rem 2.5rem;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #006b3c;
+    border: 2px solid #006b3c;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.welcome__button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}

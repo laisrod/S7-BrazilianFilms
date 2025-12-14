@@ -12,11 +12,12 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
+    "firebase": "^12.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
-    "@reduxjs/toolkit": "^2.0.1",
-    "react-redux": "^9.0.4"
+    "react-redux": "^9.0.4",
+    "react-router-dom": "^6.20.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.6",
@@ -38,4 +39,3 @@
     "vite": "^5.0.8"
   }
 }
-

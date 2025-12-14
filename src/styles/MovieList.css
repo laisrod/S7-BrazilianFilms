@@ -1,7 +1,7 @@
 .movie-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -26,6 +26,20 @@
   .movie-list {
     grid-template-columns: 1fr;
     padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .movie-card {
+    padding: 2rem;
+    min-height: 180px;
+  }
+  
+  .movie-card__name {
+    font-size: 1.5rem;
+  }
+  
+  .movie-card__year {
+    font-size: 1.1rem;
   }
 }
 
