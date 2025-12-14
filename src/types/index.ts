@@ -34,7 +34,7 @@ export interface FilterOptions {
   years: FilterOption[]
 }
 
-// Tipos para o estado do Redux
+// Tipos para o estado do Redux - Movies
 export interface MoviesState {
   movies: Movie[]
   allMovies: Movie[]
@@ -48,8 +48,18 @@ export interface MoviesState {
   filters: Filters
 }
 
+import type { User } from 'firebase/auth'
+
+// Tipos para o estado do Redux - Auth
+export interface AuthState {
+  user: User | null
+  loading: boolean
+  error: string | null
+  isAuthenticated: boolean
+}
+
 // Tipo para o RootState do Redux
 export interface RootState {
   movies: MoviesState
+  auth: AuthState
 }
-
