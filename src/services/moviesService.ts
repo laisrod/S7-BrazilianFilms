@@ -141,11 +141,7 @@ const BRAZILIAN_MOVIES: Movie[] = [
 const delay = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms))
 
-/**
- * Busca lista de filmes brasileiros
- * @param page - Número da página (padrão: 1)
- * @returns Resposta com lista de filmes
- */
+
 export const fetchMovies = async (page: number = 1): Promise<MoviesResponse> => {
   try {
     // Simula delay de rede
