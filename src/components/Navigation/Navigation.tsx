@@ -10,24 +10,26 @@ const Navigation = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { movies, previousPage } = useSelector((state: RootState) => state.movies)
-  const isHomePage = location.pathname === '/'
+
+  // Define as rotas
+  const isHomePage = location.pathname === '/home'
+  const isMovieDetailPage = location.pathname.startsWith('/movie/')
   const hasMultiplePages = movies.length > 10 || previousPage !== null
-  const shouldShowButton = !isHomePage || (isHomePage && hasMultiplePages)
+  const shouldShowButton = (isHomePage && hasMultiplePages) || isMovieDetailPage
 
   if (!shouldShowButton) {
     return null
   }
 
   const handleGoHome = () => {
-    // Se já está na home, apenas reseta os filmes
     if (isHomePage) {
+      // Se já está na home, apenas reseta os filmes para primeira página
       dispatch(resetMovies())
       dispatch(loadMovies(1))
-      // Scroll para o topo
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
-      // Se está em outra página, navega para home e reseta
-      navigate('/')
+      // Se está em outra página (detalhes), navega para home e reseta
+      navigate('/home')
       dispatch(resetMovies())
       dispatch(loadMovies(1))
     }
@@ -40,11 +42,10 @@ const Navigation = () => {
         className="navigation__home-button"
         type="button"
       >
-        INICIO
+        Início
       </button>
     </nav>
   )
 }
 
 export default Navigation
-
