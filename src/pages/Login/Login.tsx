@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { loginUser } from '../../store/slices/authSlice'
 import { loadMovies, resetMovies } from '../../store/slices/moviesSlice'
 import '../../styles/Login.css'
@@ -12,7 +12,11 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+  const location = useLocation()
   const { loading, error } = useSelector((state: RootState) => state.auth)
+
+  // Obtém a rota de origem (para onde o usuário queria ir) ou usa /welcome como padrão
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/welcome'
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -21,7 +25,8 @@ const Login = () => {
       // Carrega os filmes após o login bem-sucedido
       dispatch(resetMovies())
       dispatch(loadMovies(1))
-      navigate('/welcome')
+      // Redireciona para a página que o usuário tentou acessar originalmente
+      navigate(from, { replace: true })
     }
   }
 

@@ -8,6 +8,15 @@ export const store = configureStore({
     movies: moviesReducer,
     auth: authReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignora o path auth.user pois contém objetos Firebase não serializáveis
+        ignoredActions: ['auth/setUser', 'auth/register/fulfilled', 'auth/login/fulfilled'],
+        ignoredActionPaths: ['payload.user'],
+        ignoredPaths: ['auth.user'],
+      },
+    }),
 })
 
 export type AppDispatch = typeof store.dispatch

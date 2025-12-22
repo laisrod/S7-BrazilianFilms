@@ -23,6 +23,15 @@ const applyFilters = (movies: Movie[], filters: Filters): Movie[] => {
   if (filters.year) {
     filtered = filtered.filter((movie) => movie.model === filters.year)
   }
+  
+  // Filtro por prêmio
+  if (filters.awarded) {
+    if (filters.awarded === 'true') {
+      filtered = filtered.filter((movie) => movie.awarded === true)
+    } else if (filters.awarded === 'false') {
+      filtered = filtered.filter((movie) => movie.awarded === false)
+    }
+  }
 
   return filtered
 }
@@ -57,6 +66,7 @@ const initialState: MoviesState = {
     search: '',
     genre: '',
     year: '',
+    awarded: '',
   },
 }
 
@@ -64,6 +74,14 @@ const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {
+    setAwardedFilter: (state, action: PayloadAction<string>) => {
+      state.filters.awarded = action.payload
+      // Reaplica filtros quando muda o filtro de prêmio
+      state.movies = applyFilters(state.allMovies, {
+        ...state.filters,
+        awarded: action.payload,
+      })
+    },
     clearCurrentMovie: (state) => {
       state.currentMovie = null
       state.errorDetails = null
@@ -97,6 +115,7 @@ const moviesSlice = createSlice({
         search: '',
         genre: '',
         year: '',
+        awarded: '',
       }
       // Restaura todos os filmes quando limpa os filtros
       state.movies = [...state.allMovies]
@@ -110,6 +129,7 @@ const moviesSlice = createSlice({
         search: '',
         genre: '',
         year: '',
+        awarded: '',
       }
     },
   },
@@ -161,6 +181,7 @@ export const {
   setSearchFilter,
   setGenreFilter,
   setYearFilter,
+  setAwardedFilter,
   clearFilters,
   resetMovies,
 } = moviesSlice.actions

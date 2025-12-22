@@ -16,15 +16,15 @@ export const useInfiniteScroll = ({
   const observerTarget = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Se não há mais itens ou está carregando, não faz nada
-    if (!hasMore || loading) return
+    // Se não há mais itens, não faz nada
+    if (!hasMore) return
 
     // Cria o IntersectionObserver
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Se o elemento está visível
-          if (entry.isIntersecting) {
+          // Se o elemento está visível e não está carregando
+          if (entry.isIntersecting && !loading) {
             callback()  // Chama a função de carregar mais
           }
         })
