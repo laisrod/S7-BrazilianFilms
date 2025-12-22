@@ -1,5 +1,5 @@
 import { TMDB_API_KEY, TMDB_API_BASE_URL, TMDB_IMAGE_BASE_URL, BRAZILIAN_MOVIES_SEARCH_TERMS } from '../config/tmdb'
-import type { TMDBMovieResponse, TMDBSearchResponse, Movie } from '../types'
+import type { TMDBMovieResponse, TMDBSearchResponse, Movie, TMDBWatchProvidersResponse, TMDBWatchProvider } from '../types'
 
 /**
  * Busca diretor de um filme no TMDb
@@ -125,6 +125,30 @@ export const fetchMovieDetailsFromTMDB = async (movieId: number): Promise<TMDBMo
   }
 }
 
+export const fetchWatchProviders = async (movieId: number): Promise<TMDBWatchProvidersResponse | null> => {
+  if (!TMDB_API_KEY) {
+    return null
+  }
+
+  try {
+    const response = await fetch(
+      `${TMDB_API_BASE_URL}/movie/${movieId}/watch/providers?api_key=${TMDB_API_KEY}`
+    )
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        return null
+      }
+      return null
+    }
+
+    const data: TMDBWatchProvidersResponse = await response.json()
+    return data
+  } catch (error) {
+    return null
+  }
+}
+
 /**
  * Busca filmes brasileiros usando discover API
  * @param limit - Número máximo de filmes a retornar (padrão: 100)
@@ -226,6 +250,7 @@ export const mapTMDBToMovie = (tmdbMovie: TMDBMovieResponse, director: string, i
     image: imageUrl,
     awarded: hasAwards,
     imdbID: tmdbMovie.imdb_id || undefined,
+    tmdbId: tmdbMovie.id,
   }
 }
 

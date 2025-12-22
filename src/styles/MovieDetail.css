@@ -249,3 +249,91 @@
     max-width: 100%;
   }
 }
+
+.movie-detail__watch-providers {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #333;
+}
+
+.movie-detail__watch-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.movie-detail__provider-group {
+  margin-bottom: 1.5rem;
+}
+
+.movie-detail__provider-label {
+  display: block;
+  font-weight: 600;
+  color: #ffd700;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.movie-detail__providers-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.movie-detail__provider-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.movie-detail__provider-item:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.movie-detail__provider-logo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.movie-detail__provider-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .movie-detail__watch-title {
+    font-size: 1.1rem;
+  }
+
+  .movie-detail__provider-item {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .movie-detail__provider-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .movie-detail__provider-name {
+    font-size: 0.8rem;
+  }
+}

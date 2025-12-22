@@ -6,10 +6,11 @@ import {
   clearCurrentMovie,
 } from '../../store/slices/moviesSlice'
 import { getMoviesByGenre, getAllMovies } from '../../services/moviesService'
+import { fetchWatchProviders, searchMovieInTMDB } from '../../services/tmdbService'
 import DirectorCard from '../../components/DirectorCard/DirectorCard'
 import MovieCard from '../../components/MovieCard/MovieCard'
 import '../../styles/MovieDetail.css'
-import type { RootState, Movie } from '../../types'
+import type { RootState, Movie, TMDBWatchProvider } from '../../types'
 import type { AppDispatch } from '../../store/store'
 
 const MovieDetail = () => {
@@ -20,9 +21,14 @@ const MovieDetail = () => {
     (state: RootState) => state.movies
   )
 
-  // Busca todos os filmes do diretor (incluindo o atual para a ficha)
   const [directorMovies, setDirectorMovies] = React.useState<Movie[]>([])
   const [relatedByGenre, setRelatedByGenre] = React.useState<Movie[]>([])
+  const [watchProviders, setWatchProviders] = React.useState<{
+    flatrate?: TMDBWatchProvider[]
+    rent?: TMDBWatchProvider[]
+    buy?: TMDBWatchProvider[]
+    link?: string
+  } | null>(null)
 
   React.useEffect(() => {
     const loadRelatedMovies = async () => {
@@ -38,6 +44,31 @@ const MovieDetail = () => {
     }
     
     loadRelatedMovies()
+  }, [currentMovie])
+
+  React.useEffect(() => {
+    const loadWatchProviders = async () => {
+      if (!currentMovie) return
+      
+      let tmdbId = currentMovie.tmdbId
+      
+      if (!tmdbId && currentMovie.name) {
+        const year = parseInt(currentMovie.model) || undefined
+        const searchResult = await searchMovieInTMDB(currentMovie.name, year)
+        if (searchResult?.movie?.id) {
+          tmdbId = searchResult.movie.id
+        }
+      }
+      
+      if (!tmdbId) return
+      
+      const providers = await fetchWatchProviders(tmdbId)
+      if (providers?.results?.BR) {
+        setWatchProviders(providers.results.BR)
+      }
+    }
+    
+    loadWatchProviders()
   }, [currentMovie])
 
   useEffect(() => {
@@ -127,6 +158,87 @@ const MovieDetail = () => {
                 </div>
               )}
             </div>
+
+            {watchProviders && (watchProviders.flatrate?.length || watchProviders.rent?.length || watchProviders.buy?.length) && (
+              <div className="movie-detail__watch-providers">
+                <h3 className="movie-detail__watch-title">Onde assistir</h3>
+                
+                {watchProviders.flatrate && watchProviders.flatrate.length > 0 && (
+                  <div className="movie-detail__provider-group">
+                    <span className="movie-detail__provider-label">Streaming:</span>
+                    <div className="movie-detail__providers-list">
+                      {watchProviders.flatrate.map((provider) => (
+                        <a
+                          key={provider.provider_id}
+                          href={watchProviders.link || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="movie-detail__provider-item"
+                          title={provider.provider_name}
+                        >
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
+                            alt={provider.provider_name}
+                            className="movie-detail__provider-logo"
+                          />
+                          <span className="movie-detail__provider-name">{provider.provider_name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {watchProviders.rent && watchProviders.rent.length > 0 && (
+                  <div className="movie-detail__provider-group">
+                    <span className="movie-detail__provider-label">Alugar:</span>
+                    <div className="movie-detail__providers-list">
+                      {watchProviders.rent.map((provider) => (
+                        <a
+                          key={provider.provider_id}
+                          href={watchProviders.link || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="movie-detail__provider-item"
+                          title={provider.provider_name}
+                        >
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
+                            alt={provider.provider_name}
+                            className="movie-detail__provider-logo"
+                          />
+                          <span className="movie-detail__provider-name">{provider.provider_name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {watchProviders.buy && watchProviders.buy.length > 0 && (
+                  <div className="movie-detail__provider-group">
+                    <span className="movie-detail__provider-label">Comprar:</span>
+                    <div className="movie-detail__providers-list">
+                      {watchProviders.buy.map((provider) => (
+                        <a
+                          key={provider.provider_id}
+                          href={watchProviders.link || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="movie-detail__provider-item"
+                          title={provider.provider_name}
+                        >
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
+                            alt={provider.provider_name}
+                            className="movie-detail__provider-logo"
+                          />
+                          <span className="movie-detail__provider-name">{provider.provider_name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
 
