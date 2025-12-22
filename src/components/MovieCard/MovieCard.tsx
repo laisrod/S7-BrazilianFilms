@@ -12,11 +12,8 @@ const MovieCard = ({ id, name, model, image }: MovieCardProps) => {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    console.log('Card clicado! ID:', id) // Debug
     if (id) {
-      navigate(`/movie/${id}`) // Navega para /movie/1, /movie/2, etc.
-    } else {
-      console.error('ID não encontrado!')
+      navigate(`/movie/${id}`)
     }
   }
 

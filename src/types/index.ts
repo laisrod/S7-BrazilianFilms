@@ -7,7 +7,8 @@ export interface Movie {
   genre: string
   image?: string
   awarded?: boolean
-  imdbID?: string // ID do IMDb para busca na API
+  imdbID?: string
+  tmdbId?: number
 }
 
 // Tipos para resposta da API OMDb
@@ -102,6 +103,31 @@ export interface TMDBSearchResponse {
   }>
   total_pages: number
   total_results: number
+}
+
+export interface TMDBWatchProvider {
+  logo_path: string
+  provider_id: number
+  provider_name: string
+  display_priority: number
+}
+
+export interface TMDBWatchProvidersResponse {
+  id: number
+  results: {
+    BR?: {
+      link: string
+      flatrate?: TMDBWatchProvider[]
+      rent?: TMDBWatchProvider[]
+      buy?: TMDBWatchProvider[]
+    }
+    [country: string]: {
+      link: string
+      flatrate?: TMDBWatchProvider[]
+      rent?: TMDBWatchProvider[]
+      buy?: TMDBWatchProvider[]
+    } | undefined
+  }
 }
 
 // Tipos para resposta da API de filmes

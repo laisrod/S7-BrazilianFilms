@@ -1,12 +1,12 @@
 import { TMDB_API_KEY, TMDB_API_BASE_URL, TMDB_IMAGE_BASE_URL, BRAZILIAN_MOVIES_SEARCH_TERMS } from '../config/tmdb'
-import type { TMDBMovieResponse, TMDBSearchResponse, Movie } from '../types'
+import type { TMDBMovieResponse, TMDBSearchResponse, Movie, TMDBWatchProvidersResponse, TMDBWatchProvider } from '../types'
 
 /**
  * Busca diretor de um filme no TMDb
  * @param movieId - ID do filme no TMDb
  * @returns Nome do diretor ou null
  */
-const fetchDirectorFromTMDB = async (movieId: number): Promise<string | null> => {
+export const fetchDirectorFromTMDB = async (movieId: number): Promise<string | null> => {
   if (!TMDB_API_KEY) {
     return null
   }
@@ -125,48 +125,90 @@ export const fetchMovieDetailsFromTMDB = async (movieId: number): Promise<TMDBMo
   }
 }
 
+export const fetchWatchProviders = async (movieId: number): Promise<TMDBWatchProvidersResponse | null> => {
+  if (!TMDB_API_KEY) {
+    return null
+  }
+
+  try {
+    const response = await fetch(
+      `${TMDB_API_BASE_URL}/movie/${movieId}/watch/providers?api_key=${TMDB_API_KEY}`
+    )
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        return null
+      }
+      return null
+    }
+
+    const data: TMDBWatchProvidersResponse = await response.json()
+    return data
+  } catch (error) {
+    return null
+  }
+}
+
 /**
  * Busca filmes brasileiros usando discover API
- * @param limit - Número máximo de filmes a retornar
- * @returns Array de filmes brasileiros
+ * @param limit - Número máximo de filmes a retornar (padrão: 100)
+ * @returns Array de filmes brasileiros com diretor
  */
-export const discoverBrazilianMovies = async (limit: number = 20): Promise<TMDBMovieResponse[]> => {
+export const discoverBrazilianMovies = async (limit: number = 100): Promise<Array<{ movie: TMDBMovieResponse; director: string }>> => {
   if (!TMDB_API_KEY) {
     return []
   }
 
   try {
-    const params = new URLSearchParams({
-      api_key: TMDB_API_KEY,
-      language: 'pt-BR',
-      with_origin_country: 'BR',
-      sort_by: 'popularity.desc',
-      page: '1',
-    })
-
-    const response = await fetch(`${TMDB_API_BASE_URL}/discover/movie?${params.toString()}`)
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        return []
-      }
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const data: TMDBSearchResponse = await response.json()
+    // Busca múltiplas páginas para obter mais filmes
+    const moviesPerPage = 20 // TMDb retorna até 20 por página
+    const pagesNeeded = Math.ceil(limit / moviesPerPage)
+    const allMovies: Array<{ movie: TMDBMovieResponse; director: string }> = []
     
-    // Busca detalhes completos de cada filme
-    const movies: TMDBMovieResponse[] = []
-    for (const movie of data.results.slice(0, limit)) {
-      const details = await fetchMovieDetailsFromTMDB(movie.id)
-      if (details) {
-        movies.push(details)
+    for (let page = 1; page <= pagesNeeded && allMovies.length < limit; page++) {
+      const params = new URLSearchParams({
+        api_key: TMDB_API_KEY,
+        language: 'pt-BR',
+        with_origin_country: 'BR',
+        sort_by: 'popularity.desc',
+        page: page.toString(),
+      })
+
+      const response = await fetch(`${TMDB_API_BASE_URL}/discover/movie?${params.toString()}`)
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          break
+        }
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
-      // Pequeno delay para evitar rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      const data: TMDBSearchResponse = await response.json()
+      
+      if (!data.results || data.results.length === 0) {
+        break // Não há mais filmes
+      }
+      
+      // Busca detalhes completos de cada filme com diretor
+      for (const movie of data.results) {
+        if (allMovies.length >= limit) break
+        
+        const details = await fetchMovieDetailsFromTMDB(movie.id)
+        if (details) {
+          const director = await fetchDirectorFromTMDB(movie.id) || 'Desconhecido'
+          allMovies.push({ movie: details, director })
+        }
+        // Pequeno delay para evitar rate limiting
+        await new Promise((resolve) => setTimeout(resolve, 100))
+      }
+      
+      // Delay entre páginas
+      if (page < pagesNeeded && allMovies.length < limit) {
+        await new Promise((resolve) => setTimeout(resolve, 200))
+      }
     }
 
-    return movies
+    return allMovies
   } catch (error) {
     if (error instanceof Error && !error.message.includes('401')) {
       console.error('Erro ao descobrir filmes brasileiros no TMDb', error)
@@ -208,6 +250,7 @@ export const mapTMDBToMovie = (tmdbMovie: TMDBMovieResponse, director: string, i
     image: imageUrl,
     awarded: hasAwards,
     imdbID: tmdbMovie.imdb_id || undefined,
+    tmdbId: tmdbMovie.id,
   }
 }
 

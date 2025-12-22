@@ -4,17 +4,12 @@ import { fetchAllBrazilianMoviesFromTMDB } from './tmdbService'
 import { OMDB_API_KEY } from '../config/omdb'
 import { TMDB_API_KEY } from '../config/tmdb'
 
-// Cache para filmes buscados da API
 let cachedMovies: Movie[] | null = null
 
-/**
- * Limpa o cache de filmes (útil para forçar nova busca)
- */
 export const clearMoviesCache = () => {
   cachedMovies = null
 }
 
-// Dados mockados de filmes brasileiros famosos (fallback)
 const BRAZILIAN_MOVIES: Movie[] = [
   {
     id: 1,
@@ -153,45 +148,33 @@ const BRAZILIAN_MOVIES: Movie[] = [
   },
 ]
 
-/**
- * Obtém lista de filmes (da API OMDb ou fallback mockado)
- */
 const getMoviesList = async (): Promise<Movie[]> => {
-  // Se já temos cache válido (com pelo menos 5 filmes), retorna
   if (cachedMovies && cachedMovies.length >= 5) {
     return cachedMovies
   }
 
-  // Prioridade: TMDb > OMDb > Mockados
-  // Tenta buscar da API TMDb primeiro (melhor cobertura de filmes brasileiros)
   if (TMDB_API_KEY) {
     try {
       const tmdbMovies = await fetchAllBrazilianMoviesFromTMDB()
-      // Só usa dados da API se encontrar pelo menos 5 filmes (garante qualidade)
       if (tmdbMovies.length >= 5) {
         cachedMovies = tmdbMovies
         return tmdbMovies
       }
     } catch (error) {
-      // Silenciosamente tenta outras fontes
     }
   }
 
-  // Fallback para OMDb se TMDb não estiver disponível ou não encontrar muitos filmes
   if (OMDB_API_KEY) {
     try {
       const omdbMovies = await fetchAllBrazilianMoviesFromOMDb()
-      // Só usa dados da API se encontrar pelo menos 5 filmes (garante qualidade)
       if (omdbMovies.length >= 5) {
         cachedMovies = omdbMovies
         return omdbMovies
       }
     } catch (error) {
-      // Silenciosamente usa fallback para dados mockados
     }
   }
 
-  // Fallback para dados mockados
   return BRAZILIAN_MOVIES
 }
 
@@ -218,30 +201,20 @@ export const fetchMovies = async (page: number = 1): Promise<MoviesResponse> => 
   }
 }
 
-/**
- * Busca detalhes de um filme específico
- * @param id - ID do filme ou IMDb ID
- * @returns Detalhes do filme
- */
 export const fetchMovieById = async (id: string | number): Promise<Movie> => {
   try {
-    // Primeiro tenta buscar da lista em cache/mockada
     const allMovies = await getMoviesList()
     const numericId = parseInt(String(id))
     let movie = allMovies.find((m) => m.id === numericId)
 
-    // Se não encontrou e o ID parece ser um IMDb ID (começa com 'tt'), tenta buscar nas APIs
     if (!movie && String(id).startsWith('tt')) {
-      // Tenta TMDb primeiro (melhor para filmes brasileiros)
       if (TMDB_API_KEY) {
         try {
-          // TMDb não busca direto por IMDb ID, então tentamos OMDb
           const omdbMovie = await fetchMovieByIMDbId(String(id))
           if (omdbMovie) {
             movie = mapOMDbToMovie(omdbMovie, numericId || Date.now())
           }
         } catch (error) {
-          // Ignora erro
         }
       } else if (OMDB_API_KEY) {
         const omdbMovie = await fetchMovieByIMDbId(String(id))
@@ -251,7 +224,6 @@ export const fetchMovieById = async (id: string | number): Promise<Movie> => {
       }
     }
 
-    // Se ainda não encontrou, tenta buscar na lista mockada como fallback
     if (!movie) {
       movie = BRAZILIAN_MOVIES.find((m) => m.id === numericId)
     }
@@ -267,10 +239,6 @@ export const fetchMovieById = async (id: string | number): Promise<Movie> => {
   }
 }
 
-/**
- * Obtém opções de filtros disponíveis (gêneros e anos únicos)
- * @returns Objeto com arrays de opções de gêneros e anos
- */
 export const getFilterOptions = async (): Promise<FilterOptions> => {
   const allMovies = await getMoviesList()
   
@@ -289,12 +257,6 @@ export const getFilterOptions = async (): Promise<FilterOptions> => {
   }
 }
 
-/**
- * Busca filmes relacionados por diretor (excluindo o filme atual)
- * @param director - Nome do diretor
- * @param excludeId - ID do filme a excluir
- * @returns Array de filmes do mesmo diretor
- */
 export const getMoviesByDirector = async (director: string, excludeId?: number): Promise<Movie[]> => {
   const allMovies = await getMoviesList()
   return allMovies.filter(
@@ -302,13 +264,6 @@ export const getMoviesByDirector = async (director: string, excludeId?: number):
   )
 }
 
-/**
- * Busca filmes relacionados por gênero (excluindo o filme atual)
- * @param genre - Gênero do filme
- * @param excludeId - ID do filme a excluir
- * @param limit - Limite de filmes a retornar (padrão: 3)
- * @returns Array de filmes do mesmo gênero
- */
 export const getMoviesByGenre = async (
   genre: string,
   excludeId?: number,
@@ -320,10 +275,6 @@ export const getMoviesByGenre = async (
   ).slice(0, limit)
 }
 
-/**
- * Busca todos os filmes (para uso em componentes que precisam de todos os dados)
- * @returns Array com todos os filmes
- */
 export const getAllMovies = async (): Promise<Movie[]> => {
   return await getMoviesList()
 }
