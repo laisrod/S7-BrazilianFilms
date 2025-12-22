@@ -7,7 +7,7 @@ import {
   } from 'firebase/auth'
   import { auth } from '../config/firebase'
   
-  // Cadastro
+  // Cadastro - signUp - Cadastro de usuário
   export const signUp = async (email: string, password: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
@@ -18,7 +18,7 @@ import {
     }
   }
   
-  // Login
+  // Login - signIn - Login de usuário
   export const signIn = async (email: string, password: string) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
@@ -28,7 +28,7 @@ import {
     }
   }
   
-  // Logout
+  // Logout - signOutUser - Logout de usuário
   export const signOutUser = async () => {
     try {
       await signOut(auth)
@@ -38,7 +38,7 @@ import {
     }
   }
   
-  // Observar mudanças no estado de autenticação
+  // onAuthChange - Observar mudanças no estado de autenticação
   export const onAuthChange = (callback: (user: User | null) => void) => {
     return onAuthStateChanged(auth, callback)
   }

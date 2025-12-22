@@ -1,5 +1,7 @@
+import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import MovieCard from '../MovieCard/MovieCard'
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
 import '../../styles/MovieList.css'
 import type { RootState } from '../../types'
 import type { AppDispatch } from '../../store/store'
@@ -9,11 +11,18 @@ const MovieList = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { movies, loading, error, nextPage } = useSelector((state: RootState) => state.movies)
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (nextPage && !loading) {
       dispatch(loadMovies(nextPage))
     }
-  }
+  }, [dispatch, nextPage, loading])
+
+  // Configura o infinite scroll
+  const observerTarget = useInfiniteScroll({
+    callback: handleLoadMore,
+    hasMore: !!nextPage,
+    loading: loading,
+  })
 
   if (loading && movies.length === 0) {
     return (
@@ -53,16 +62,14 @@ const MovieList = () => {
         )
       })}
 
-      {/* BOTÃO "VER MAIS" */}
+      {/* Elemento observado pelo infinite scroll */}
       {nextPage && (
-        <div className="movie-list__load-more">
-          <button
-            onClick={handleLoadMore}
-            disabled={loading}
-            className="movie-list__load-more-button"
-          >
-            {loading ? 'Carregando...' : 'Ver Mais'}
-          </button>
+        <div ref={observerTarget} className="movie-list__observer">
+          {loading && (
+            <div className="movie-list__loading" data-testid="movie-list-loading-more">
+              <p>Carregando mais filmes...</p>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
 .movie-detail {
   min-height: 100vh;
-  background: linear-gradient(135deg, #006b3c 0%, #008f39 100%);
-  padding: 2rem;
+  background: #000;
+  color: #fff;
+  padding: 2rem 0;
 }
 
 .movie-detail__loading,
@@ -12,107 +13,239 @@
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  color: #ffd700;
+  color: #fff;
   font-size: 1.2rem;
 }
 
-.movie-detail__back-button {
-  display: inline-block;
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  color: #006b3c;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-bottom: 2rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  position: relative;
-}
-
-.movie-detail__back-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
-}
-
-.movie-detail__back-button:active {
-  transform: translateY(0);
-}
-
 .movie-detail__container {
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+  padding: 0 2rem;
 }
 
-.movie-detail__header {
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 3px solid #ffd700;
+/* Seção Principal do Filme */
+.movie-detail__main {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  padding-bottom: 3rem;
+  border-bottom: 2px solid #333;
 }
 
-.movie-detail__title {
-  color: #006b3c;
-  font-size: 2.5rem;
-  margin: 0;
-  font-weight: 700;
+.movie-detail__image-wrapper {
+  width: 100%;
+  max-width: 600px;
 }
 
-.movie-detail__content {
-  margin-top: 2rem;
+.movie-detail__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
 }
 
-.movie-detail__info {
+.movie-detail__info-wrapper {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.movie-detail__field {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: rgba(0, 107, 60, 0.05);
-  border-radius: 8px;
-  border-left: 4px solid #ffd700;
+.movie-detail__title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.movie-detail__label {
-  font-weight: 600;
-  color: #006b3c;
+.movie-detail__description {
   font-size: 1.1rem;
+  line-height: 1.8;
+  color: #ccc;
+  margin: 0;
 }
 
-.movie-detail__value {
-  color: #333;
+.movie-detail__specs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.movie-detail__spec-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.movie-detail__spec-label {
+  font-weight: 600;
+  color: #fff;
+  min-width: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.movie-detail__spec-value {
+  color: #ccc;
   font-size: 1rem;
+}
+
+.movie-detail__spec-value--awarded {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+/* Seções (Diretores e Filmes Relacionados) */
+.movie-detail__section {
+  margin-bottom: 4rem;
+}
+
+.movie-detail__director-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.movie-detail__related-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.movie-detail__section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  border-bottom: 2px solid #ffd700;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.movie-detail__cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.movie-detail__card-item {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.movie-detail__card-item:hover {
+  transform: translateY(-8px);
+}
+
+.movie-detail__card-item:focus {
+  outline: 2px solid #ffd700;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.movie-detail__card-image-wrapper {
+  width: 100%;
+  max-width: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.movie-detail__card-item:hover .movie-detail__card-image-wrapper {
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+}
+
+.movie-detail__card-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.movie-detail__card-name {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .movie-detail__main {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .movie-detail__image-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .movie-detail__title {
+    font-size: 2.5rem;
+    text-align: center;
+  }
 }
 
 @media (max-width: 768px) {
   .movie-detail {
-    padding: 1rem;
+    padding: 1rem 0;
   }
 
   .movie-detail__container {
-    padding: 1.5rem;
+    padding: 0 1rem;
   }
 
   .movie-detail__title {
     font-size: 2rem;
   }
 
-  .movie-detail__field {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+  .movie-detail__description {
+    font-size: 1rem;
+  }
+
+  .movie-detail__cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .movie-detail__related-movies-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .movie-detail__section-title {
+    font-size: 1.2rem;
   }
 }
 
+@media (max-width: 480px) {
+  .movie-detail__cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-detail__related-movies-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-detail__card-image-wrapper {
+    max-width: 100%;
+  }
+}
