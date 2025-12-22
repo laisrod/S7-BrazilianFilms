@@ -1,7 +1,5 @@
 import type { Movie, MoviesResponse, FilterOptions } from '../types'
-import { fetchAllBrazilianMoviesFromOMDb, fetchMovieByIMDbId, mapOMDbToMovie } from './omdbService'
 import { fetchAllBrazilianMoviesFromTMDB, discoverBrazilianMovies, mapTMDBToMovie } from './tmdbService'
-import { OMDB_API_KEY } from '../config/omdb'
 import { TMDB_API_KEY } from '../config/tmdb'
 
 let cachedMovies: Movie[] | null = null
@@ -165,22 +163,12 @@ const getMoviesList = async (): Promise<Movie[]> => {
       }
       
       const tmdbMovies = await fetchAllBrazilianMoviesFromTMDB()
-      if (tmdbMovies.length >= 5) {
+      if (tmdbMovies.length > 0) {
         cachedMovies = tmdbMovies
         return tmdbMovies
       }
     } catch (error) {
-    }
-  }
-
-  if (OMDB_API_KEY) {
-    try {
-      const omdbMovies = await fetchAllBrazilianMoviesFromOMDb()
-      if (omdbMovies.length >= 5) {
-        cachedMovies = omdbMovies
-        return omdbMovies
-      }
-    } catch (error) {
+      console.error('Erro ao buscar filmes do TMDb:', error)
     }
   }
 
@@ -215,23 +203,6 @@ export const fetchMovieById = async (id: string | number): Promise<Movie> => {
     const allMovies = await getMoviesList()
     const numericId = parseInt(String(id))
     let movie = allMovies.find((m) => m.id === numericId)
-
-    if (!movie && String(id).startsWith('tt')) {
-      if (TMDB_API_KEY) {
-        try {
-          const omdbMovie = await fetchMovieByIMDbId(String(id))
-          if (omdbMovie) {
-            movie = mapOMDbToMovie(omdbMovie, numericId || Date.now())
-          }
-        } catch (error) {
-        }
-      } else if (OMDB_API_KEY) {
-        const omdbMovie = await fetchMovieByIMDbId(String(id))
-        if (omdbMovie) {
-          movie = mapOMDbToMovie(omdbMovie, numericId || Date.now())
-        }
-      }
-    }
 
     if (!movie) {
       movie = BRAZILIAN_MOVIES.find((m) => m.id === numericId)

@@ -40,7 +40,6 @@ VITE_FIREBASE_STORAGE_BUCKET=your-bucket
 VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
 VITE_TMDB_API_KEY=your-tmdb-key
-VITE_OMDB_API_KEY=your-omdb-key
 ```
 
 3. **Run the project**
@@ -59,7 +58,7 @@ http://localhost:5173
 src/
 ├── components/     # Reusable components (MovieCard, FilterBar, etc.)
 ├── pages/         # Application pages (Home, Login, MovieDetail)
-├── services/      # API integration (TMDb, OMDb, Firebase)
+├── services/      # API integration (TMDb, Firebase)
 ├── store/         # State management (Redux)
 ├── styles/        # CSS files
 ├── routes/        # Route configuration
@@ -92,7 +91,6 @@ Filters are applied in real-time to all loaded movies.
 ## APIs Used
 
 - **TMDb** (The Movie Database): Search movies, details, directors and where to watch
-- **OMDb** (Open Movie Database): Complementary movie data
 - **Firebase Auth**: User authentication
 
 ## Common Issues
