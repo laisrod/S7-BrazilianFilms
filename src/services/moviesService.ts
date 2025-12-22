@@ -1,6 +1,6 @@
 import type { Movie, MoviesResponse, FilterOptions } from '../types'
 import { fetchAllBrazilianMoviesFromOMDb, fetchMovieByIMDbId, mapOMDbToMovie } from './omdbService'
-import { fetchAllBrazilianMoviesFromTMDB } from './tmdbService'
+import { fetchAllBrazilianMoviesFromTMDB, discoverBrazilianMovies, mapTMDBToMovie } from './tmdbService'
 import { OMDB_API_KEY } from '../config/omdb'
 import { TMDB_API_KEY } from '../config/tmdb'
 
@@ -155,6 +155,15 @@ const getMoviesList = async (): Promise<Movie[]> => {
 
   if (TMDB_API_KEY) {
     try {
+      const discoverResults = await discoverBrazilianMovies(100)
+      if (discoverResults.length > 0) {
+        const movies: Movie[] = discoverResults.map((result, index) => 
+          mapTMDBToMovie(result.movie, result.director, index + 1)
+        )
+        cachedMovies = movies
+        return movies
+      }
+      
       const tmdbMovies = await fetchAllBrazilianMoviesFromTMDB()
       if (tmdbMovies.length >= 5) {
         cachedMovies = tmdbMovies
