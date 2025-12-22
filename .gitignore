@@ -31,3 +31,4 @@ storybook-static
 .env.local
 .env.production
 
+LINKEDIN_POST.md
