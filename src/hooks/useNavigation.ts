@@ -1,4 +1,22 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, type Location } from 'react-router-dom'
+
+const getFromPathFromState = (location: Location, defaultPath: string): string => {
+  if (!location.state) {
+    return defaultPath
+  }
+
+  const state = location.state as { from?: { pathname: string } }
+
+  if (!state.from) {
+    return defaultPath
+  }
+
+  if (!state.from.pathname) {
+    return defaultPath
+  }
+
+  return state.from.pathname
+}
 
 export const useNavigation = () => {
   const navigate = useNavigate()
@@ -13,12 +31,12 @@ export const useNavigation = () => {
   }
 
   const getFromPath = (defaultPath = '/welcome') => {
-    return (location.state as { from?: { pathname: string } })?.from?.pathname || defaultPath
+    return getFromPathFromState(location, defaultPath)
   }
 
   const goToFrom = (defaultPath = '/welcome') => {
     const from = getFromPath(defaultPath)
-    navigate(from, { replace: true })
+    goTo(from, true)
   }
 
   return {
