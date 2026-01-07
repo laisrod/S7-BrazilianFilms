@@ -1,13 +1,12 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import type { RootState } from '../../types'
+import { useAppSelector } from '../../store/hooks'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth)
+  const { isAuthenticated } = useAppSelector((state) => state.auth)
   const location = useLocation()
 
   if (!isAuthenticated) {

@@ -1,28 +1,9 @@
-import { useCallback } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 import MovieCard from '../MovieCard/MovieCard'
-import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import { useMovies } from '../../hooks/useMovies'
 import '../../styles/MovieList.css'
-import type { RootState } from '../../types'
-import type { AppDispatch } from '../../store/store'
-import { loadMovies } from '../../store/slices/moviesSlice'
 
 const MovieList = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { movies, loading, error, nextPage } = useSelector((state: RootState) => state.movies)
-
-  const handleLoadMore = useCallback(() => {
-    if (nextPage && !loading) {
-      dispatch(loadMovies(nextPage))
-    }
-  }, [dispatch, nextPage, loading])
-
-  // Configura o infinite scroll
-  const observerTarget = useInfiniteScroll({
-    callback: handleLoadMore,
-    hasMore: !!nextPage,
-    loading: loading,
-  })
+  const { movies, loading, error, nextPage, observerTarget } = useMovies()
 
   if (loading && movies.length === 0) {
     return (

@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigation } from '../../hooks/useNavigation'
 import '../../styles/NavBar.css'
 
 const Navbar = () => {
-  const navigate = useNavigate()
+  const { goTo } = useNavigation()
 
   const handleGoToWelcome = () => {
-    navigate('/welcome')
+    goTo('/welcome')
   }
 
   return (

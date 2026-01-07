@@ -1,50 +1,21 @@
-import { useState, FormEvent } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, Link } from 'react-router-dom'
-import { registerUser } from '../../store/slices/authSlice'
+import { Link } from 'react-router-dom'
+import { useRegisterForm } from '../../hooks/useRegisterForm'
+import { getFirebaseErrorMessage } from '../../utils/firebaseErrors'
 import '../../styles/Register.css'
-import type { AppDispatch } from '../../store/store'
-import type { RootState } from '../../types'
 
 const Register = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [validationError, setValidationError] = useState('')
-  
-  const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
-  const { loading, error } = useSelector((state: RootState) => state.auth)
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setValidationError('')
-
-    // Validação de senhas
-    if (password !== confirmPassword) {
-      setValidationError('As senhas não coincidem')
-      return
-    }
-
-    if (password.length < 6) {
-      setValidationError('A senha deve ter no mínimo 6 caracteres')
-      return
-    }
-
-    const result = await dispatch(registerUser({ email, password }))
-    if (registerUser.fulfilled.match(result)) {
-      navigate('/welcome')
-    }
-  }
-
-  const getErrorMessage = (errorCode: string) => {
-    const errorMessages: Record<string, string> = {
-      'auth/email-already-in-use': 'Este email já está cadastrado',
-      'auth/invalid-email': 'Email inválido',
-      'auth/weak-password': 'Senha muito fraca (mínimo 6 caracteres)',
-    }
-    return errorMessages[errorCode] || error || 'Erro ao cadastrar'
-  }
+  const {
+    email,
+    password,
+    confirmPassword,
+    validationError,
+    loading,
+    error,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    handleSubmit,
+  } = useRegisterForm()
 
   return (
     <div className="register">
@@ -54,7 +25,7 @@ const Register = () => {
         
         {(error || validationError) && (
           <div className="register__error">
-            {validationError || getErrorMessage(error || '')}
+            {validationError || getFirebaseErrorMessage(error)}
           </div>
         )}
 

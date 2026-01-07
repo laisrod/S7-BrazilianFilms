@@ -1,34 +1,18 @@
-import { useState, FormEvent } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
-import { loginUser } from '../../store/slices/authSlice'
-import { loadMovies, resetMovies } from '../../store/slices/moviesSlice'
+import { Link } from 'react-router-dom'
+import { useLoginForm } from '../../hooks/useLoginForm'
+import { getFirebaseErrorMessage } from '../../utils/firebaseErrors'
 import '../../styles/Login.css'
-import type { AppDispatch } from '../../store/store'
-import type { RootState } from '../../types'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { loading, error } = useSelector((state: RootState) => state.auth)
-
-  // Obtém a rota de origem (para onde o usuário queria ir) ou usa /welcome como padrão
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/welcome'
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const result = await dispatch(loginUser({ email, password }))
-    if (loginUser.fulfilled.match(result)) {
-      // Carrega os filmes após o login bem-sucedido
-      dispatch(resetMovies())
-      dispatch(loadMovies(1))
-      // Redireciona para a página que o usuário tentou acessar originalmente
-      navigate(from, { replace: true })
-    }
-  }
+  const {
+    email,
+    password,
+    loading,
+    error,
+    setEmail,
+    setPassword,
+    handleSubmit,
+  } = useLoginForm()
 
   return (
     <div className="login">
@@ -38,7 +22,7 @@ const Login = () => {
         
         {error && (
           <div className="login__error">
-            {error}
+            {getFirebaseErrorMessage(error)}
           </div>
         )}
 
