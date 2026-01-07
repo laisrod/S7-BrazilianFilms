@@ -43,7 +43,7 @@ const MovieList = () => {
         )
       })}
 
-      {/* Elemento observado pelo infinite scroll */}
+      {/* Elemento observado pelo infinite */}
       {nextPage && (
         <div ref={observerTarget} className="movie-list__observer">
           {loading && (

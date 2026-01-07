@@ -23,7 +23,7 @@ export const useInfiniteScroll = ({
   loading,
   threshold = 0.1,
 }: UseInfiniteScrollOptions) => {
-  const observerTarget = useRef<HTMLDivElement>(null)
+  const observerTarget = useRef<HTMLDivElement>(null) //elemento observado
 
   useEffect(() => {
     if (!hasMore) {

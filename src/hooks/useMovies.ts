@@ -7,6 +7,7 @@ export const useMovies = () => {
   const dispatch = useAppDispatch()
   const { movies, allMovies, loading, error, nextPage } = useAppSelector((state) => state.movies)
 
+  //que carrega mais filmes
   const handleLoadMore = useCallback(() => {
     if (nextPage && !loading) {
       dispatch(loadMovies(nextPage))
