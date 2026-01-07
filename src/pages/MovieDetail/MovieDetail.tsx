@@ -1,85 +1,20 @@
-import React, { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  loadMovieDetails,
-  clearCurrentMovie,
-} from '../../store/slices/moviesSlice'
-import { getMoviesByGenre, getAllMovies } from '../../services/moviesService'
-import { fetchWatchProviders, searchMovieInTMDB } from '../../services/tmdbService'
 import DirectorCard from '../../components/DirectorCard/DirectorCard'
 import MovieCard from '../../components/MovieCard/MovieCard'
+import { useMovieDetail } from '../../hooks/useMovieDetail'
 import '../../styles/MovieDetail.css'
-import type { RootState, Movie, TMDBWatchProvider } from '../../types'
-import type { AppDispatch } from '../../store/store'
 
 const MovieDetail = () => {
-  const { id } = useParams<{ id: string }>()
-  const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
-  const { currentMovie, loadingDetails, errorDetails } = useSelector(
-    (state: RootState) => state.movies
-  )
-
-  const [directorMovies, setDirectorMovies] = React.useState<Movie[]>([])
-  const [relatedByGenre, setRelatedByGenre] = React.useState<Movie[]>([])
-  const [watchProviders, setWatchProviders] = React.useState<{
-    flatrate?: TMDBWatchProvider[]
-    rent?: TMDBWatchProvider[]
-    buy?: TMDBWatchProvider[]
-    link?: string
-  } | null>(null)
-
-  React.useEffect(() => {
-    const loadRelatedMovies = async () => {
-      if (!currentMovie) return
-      
-      const [director, genre] = await Promise.all([
-        getAllMovies().then(movies => movies.filter(m => m.director === currentMovie.director)),
-        getMoviesByGenre(currentMovie.genre, currentMovie.id, 3)
-      ])
-      
-      setDirectorMovies(director)
-      setRelatedByGenre(genre)
-    }
-    
-    loadRelatedMovies()
-  }, [currentMovie])
-
-  React.useEffect(() => {
-    const loadWatchProviders = async () => {
-      if (!currentMovie) return
-      
-      let tmdbId = currentMovie.tmdbId
-      
-      if (!tmdbId && currentMovie.name) {
-        const year = parseInt(currentMovie.model) || undefined
-        const searchResult = await searchMovieInTMDB(currentMovie.name, year)
-        if (searchResult?.movie?.id) {
-          tmdbId = searchResult.movie.id
-        }
-      }
-      
-      if (!tmdbId) return
-      
-      const providers = await fetchWatchProviders(tmdbId)
-      if (providers?.results?.BR) {
-        setWatchProviders(providers.results.BR)
-      }
-    }
-    
-    loadWatchProviders()
-  }, [currentMovie])
-
-  useEffect(() => {
-    if (id) {
-      dispatch(loadMovieDetails(id))
-    }
-
-    return () => {
-      dispatch(clearCurrentMovie())
-    }
-  }, [id, dispatch])
+  const {
+    currentMovie,
+    loadingDetails,
+    errorDetails,
+    directorMovies,
+    relatedByGenre,
+    watchProviders,
+    goTo,
+    getImageUrl,
+    handleImageError,
+  } = useMovieDetail()
 
   if (loadingDetails) {
     return (
@@ -111,7 +46,7 @@ const MovieDetail = () => {
     )
   }
 
-  const imageUrl = currentMovie.image || `/image/${currentMovie.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')}.jpg`
+  const imageUrl = getImageUrl(currentMovie)
 
   return (
     <div className="movie-detail" data-testid="movie-detail">
@@ -125,7 +60,7 @@ const MovieDetail = () => {
               className="movie-detail__image"
               onError={(e) => {
                 const target = e.target as HTMLImageElement
-                target.src = `https://via.placeholder.com/600x800/006b3c/ffd700?text=${encodeURIComponent(currentMovie.name)}`
+                target.src = handleImageError(currentMovie.name)
               }}
             />
           </div>
@@ -250,7 +185,7 @@ const MovieDetail = () => {
               <DirectorCard
                 directorName={currentMovie.director}
                 movies={directorMovies}
-                onMovieClick={(movieId) => navigate(`/movie/${movieId}`)}
+                onMovieClick={(movieId) => goTo(`/movie/${movieId}`)}
               />
             </div>
           </section>

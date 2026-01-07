@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigation } from '../../hooks/useNavigation'
 import '../../styles/MovieCard.css'
 
 interface MovieCardProps {
@@ -9,11 +9,11 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ id, name, model, image }: MovieCardProps) => {
-  const navigate = useNavigate()
+  const { goTo } = useNavigation()
 
   const handleClick = () => {
     if (id) {
-      navigate(`/movie/${id}`)
+      goTo(`/movie/${id}`)
     }
   }
 

@@ -1,66 +1,21 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  setSearchFilter,
-  setGenreFilter,
-  setYearFilter,
-  setAwardedFilter,
-  clearFilters,
-} from '../../store/slices/moviesSlice'
-import { getFilterOptions } from '../../services/moviesService'
 import FilterInput from '../FilterInput/FilterInput'
 import FilterSelect from '../FilterSelect/FilterSelect'
+import { useFilters } from '../../hooks/useFilters'
 import '../../styles/FilterBar.css'
-import type { RootState, FilterOption } from '../../types'
-import type { AppDispatch } from '../../store/store'
 
 const FilterBar = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { filters } = useSelector((state: RootState) => state.movies)
-  const [filterOptions, setFilterOptions] = React.useState<{
-    genres: FilterOption[]
-    years: FilterOption[]
-    awarded: FilterOption[]
-  }>({
-    genres: [],
-    years: [],
-    awarded: [
-      { value: 'true', label: 'Premiados' },
-      { value: 'false', label: 'Não premiados' },
-    ],
-  })
-
-  React.useEffect(() => {
-    const loadFilterOptions = async () => {
-      const options = await getFilterOptions()
-      setFilterOptions(options)
-    }
-    loadFilterOptions()
-  }, [])
+  const {
+    filters,
+    filterOptions,
+    hasActiveFilters,
+    handleSearchChange,
+    handleGenreChange,
+    handleYearChange,
+    handleAwardedChange,
+    handleClearFilters,
+  } = useFilters()
 
   const { genres: genreOptions, years: yearOptions, awarded: awardedOptions } = filterOptions
-
-  const handleSearchChange = (value: string) => {
-    dispatch(setSearchFilter(value))
-  }
-
-  const handleGenreChange = (value: string) => {
-    dispatch(setGenreFilter(value))
-  }
-
-  const handleYearChange = (value: string) => {
-    dispatch(setYearFilter(value))
-  }
-
-  const handleAwardedChange = (value: string) => {
-    dispatch(setAwardedFilter(value))
-  }
-
-  const handleClearFilters = () => {
-    dispatch(clearFilters())
-  }
-
-  const hasActiveFilters = Boolean(filters.search || filters.genre || filters.year || filters.awarded)
 
   return (
     <div className="filter-bar" data-testid="filter-bar">

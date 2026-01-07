@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../store/hooks'
 import { onAuthChange } from '../../services/authService'
 import { setUser } from '../../store/slices/authSlice'
-import type { AppDispatch } from '../../store/store'
 //responsável por manter o Redux sincronizado com o Firebase.
 //AuthListener - Sincronização de Estado
 const AuthListener = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     // onAuthChange - Observar mudanças no estado de autenticação

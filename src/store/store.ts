@@ -5,8 +5,8 @@ import type { RootState } from '../types'
 
 export const store = configureStore({
   reducer: {
-    movies: moviesReducer,
-    auth: authReducer,
+    movies: moviesReducer, //gerencia filmes
+    auth: authReducer, //gerencia autenticação
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

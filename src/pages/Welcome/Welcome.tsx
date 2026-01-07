@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigation } from '../../hooks/useNavigation'
 import '../../styles/Welcome.css'
 
 const Welcome = () => {
-    const navigate = useNavigate()
+    const { goTo } = useNavigation()
 
     const handleGoToHome = () => {
-        navigate('/home')
+        goTo('/home')
     }
 
     return (
