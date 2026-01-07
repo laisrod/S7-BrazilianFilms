@@ -13,7 +13,6 @@ export const useRegisterForm = () => {
     e.preventDefault()
     setValidationError('')
 
-    // Validação de senhas
     if (password !== confirmPassword) {
       setValidationError('As senhas não coincidem')
       return
