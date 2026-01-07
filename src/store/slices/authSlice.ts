@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/tool
 import { signUp, signIn, signOutUser } from '../../services/authService'
 import type { User } from 'firebase/auth'
 
-//Gerenciamento de Estado (Redux) - AuthState - Estado de autenticação
+//Gerenciamento de Estado autenticação
 interface AuthState {
   user: User | null
   loading: boolean

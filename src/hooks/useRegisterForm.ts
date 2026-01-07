@@ -6,14 +6,13 @@ export const useRegisterForm = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [validationError, setValidationError] = useState('')
-  
+
   const { loading, error, register } = useAuth()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setValidationError('')
 
-    // Validação de senhas
     if (password !== confirmPassword) {
       setValidationError('As senhas não coincidem')
       return

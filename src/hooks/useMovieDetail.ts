@@ -14,6 +14,25 @@ interface WatchProviders {
   link?: string
 }
 
+const getTmdbId = async (movie: Movie): Promise<number | null> => {
+  if (movie.tmdbId) {
+    return movie.tmdbId
+  }
+
+  if (!movie.name) {
+    return null
+  }
+
+  const year = parseInt(movie.model) || undefined
+  const searchResult = await searchMovieInTMDB(movie.name, year)
+
+  if (searchResult && searchResult.movie && searchResult.movie.id) {
+    return searchResult.movie.id
+  }
+
+  return null
+}
+
 export const useMovieDetail = () => {
   const { id } = useParams<{ id: string }>()
   const dispatch = useAppDispatch()
@@ -37,9 +56,14 @@ export const useMovieDetail = () => {
   }, [id, dispatch])
 
   useEffect(() => {
-    if (!currentMovie) return
+    if (!currentMovie) {
+      setDirectorMovies([])
+      setRelatedByGenre([])
+      setWatchProviders(null)
+      return
+    }
 
-    const loadRelatedMovies = async () => {
+    const loadRelatedData = async () => {
       const allMovies = await getAllMovies()
       const moviesByDirector = allMovies.filter(
         (movie) => movie.director === currentMovie.director
@@ -55,32 +79,25 @@ export const useMovieDetail = () => {
       setRelatedByGenre(moviesByGenre)
     }
 
-    loadRelatedMovies()
-  }, [currentMovie])
+    const loadProviders = async () => {
+      const tmdbId = await getTmdbId(currentMovie)
 
-  useEffect(() => {
-    if (!currentMovie) return
-
-    const loadWatchProviders = async () => {
-      let tmdbId = currentMovie.tmdbId
-
-      if (!tmdbId && currentMovie.name) {
-        const year = parseInt(currentMovie.model) || undefined
-        const searchResult = await searchMovieInTMDB(currentMovie.name, year)
-        if (searchResult?.movie?.id) {
-          tmdbId = searchResult.movie.id
-        }
+      if (!tmdbId) {
+        setWatchProviders(null)
+        return
       }
 
-      if (!tmdbId) return
-
       const providers = await fetchWatchProviders(tmdbId)
-      if (providers?.results?.BR) {
+
+      if (providers && providers.results && providers.results.BR) {
         setWatchProviders(providers.results.BR)
+      } else {
+        setWatchProviders(null)
       }
     }
 
-    loadWatchProviders()
+    loadRelatedData()
+    loadProviders()
   }, [currentMovie])
 
   const getImageUrl = (movie: typeof currentMovie) => {

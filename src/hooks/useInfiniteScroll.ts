@@ -7,6 +7,16 @@ interface UseInfiniteScrollOptions {
   threshold?: number
 }
 
+const handleIntersection = (callback: () => void, loading: boolean) => {
+  return (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !loading) {
+        callback()
+      }
+    })
+  }
+}
+
 export const useInfiniteScroll = ({
   callback,
   hasMore,
@@ -16,26 +26,24 @@ export const useInfiniteScroll = ({
   const observerTarget = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!hasMore) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !loading) {
-            callback()
-          }
-        })
-      },
-      { threshold }  
-    )
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current)
+    if (!hasMore) {
+      return
     }
 
+    const targetElement = observerTarget.current
+
+    if (!targetElement) {
+      return
+    }
+
+    const handleIntersect = handleIntersection(callback, loading)
+    const observer = new IntersectionObserver(handleIntersect, { threshold })
+
+    observer.observe(targetElement)
+
     return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current)
+      if (targetElement) {
+        observer.unobserve(targetElement)
       }
     }
   }, [callback, hasMore, loading, threshold])
