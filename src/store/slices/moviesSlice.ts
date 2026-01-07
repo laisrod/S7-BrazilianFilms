@@ -2,11 +2,9 @@ import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/tool
 import { fetchMovies, fetchMovieById } from '../../services/moviesService'
 import type { Movie, MoviesState, Filters } from '../../types'
 
-// Função auxiliar para aplicar filtros
 const applyFilters = (movies: Movie[], filters: Filters): Movie[] => {
   let filtered = [...movies]
 
-  // Filtro por busca (nome)
   if (filters.search) {
     const searchLower = filters.search.toLowerCase()
     filtered = filtered.filter((movie) =>
@@ -14,26 +12,25 @@ const applyFilters = (movies: Movie[], filters: Filters): Movie[] => {
     )
   }
 
-  // Filtro por gênero
   if (filters.genre) {
     filtered = filtered.filter((movie) => movie.genre === filters.genre)
   }
 
-  // Filtro por ano
   if (filters.year) {
     filtered = filtered.filter((movie) => movie.model === filters.year)
   }
   
-  // Filtro por prêmio
   if (filters.awarded) {
-    if (filters.awarded === 'true') {
-      filtered = filtered.filter((movie) => movie.awarded === true)
-    } else if (filters.awarded === 'false') {
-      filtered = filtered.filter((movie) => movie.awarded === false)
-    }
+    const isAwarded = filters.awarded === 'true'
+    filtered = filtered.filter((movie) => movie.awarded === isAwarded)
   }
 
   return filtered
+}
+
+const updateFilterAndReapply = (state: MoviesState, filterName: keyof Filters, value: string) => {
+  state.filters[filterName] = value
+  state.movies = applyFilters(state.allMovies, state.filters)
 }
 
 export const loadMovies = createAsyncThunk(
@@ -74,41 +71,17 @@ const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {
-    setAwardedFilter: (state, action: PayloadAction<string>) => {
-      state.filters.awarded = action.payload
-      // Reaplica filtros quando muda o filtro de prêmio
-      state.movies = applyFilters(state.allMovies, {
-        ...state.filters,
-        awarded: action.payload,
-      })
-    },
-    clearCurrentMovie: (state) => {
-      state.currentMovie = null
-      state.errorDetails = null
-    },
     setSearchFilter: (state, action: PayloadAction<string>) => {
-      state.filters.search = action.payload
-      // Reaplica filtros quando muda o filtro de busca
-      state.movies = applyFilters(state.allMovies, {
-        ...state.filters,
-        search: action.payload,
-      })
+      updateFilterAndReapply(state, 'search', action.payload)
     },
     setGenreFilter: (state, action: PayloadAction<string>) => {
-      state.filters.genre = action.payload
-      // Reaplica filtros quando muda o filtro de gênero
-      state.movies = applyFilters(state.allMovies, {
-        ...state.filters,
-        genre: action.payload,
-      })
+      updateFilterAndReapply(state, 'genre', action.payload)
     },
     setYearFilter: (state, action: PayloadAction<string>) => {
-      state.filters.year = action.payload
-      // Reaplica filtros quando muda o filtro de ano
-      state.movies = applyFilters(state.allMovies, {
-        ...state.filters,
-        year: action.payload,
-      })
+      updateFilterAndReapply(state, 'year', action.payload)
+    },
+    setAwardedFilter: (state, action: PayloadAction<string>) => {
+      updateFilterAndReapply(state, 'awarded', action.payload)
     },
     clearFilters: (state) => {
       state.filters = {
@@ -117,8 +90,11 @@ const moviesSlice = createSlice({
         year: '',
         awarded: '',
       }
-      // Restaura todos os filmes quando limpa os filtros
       state.movies = [...state.allMovies]
+    },
+    clearCurrentMovie: (state) => {
+      state.currentMovie = null
+      state.errorDetails = null
     },
     resetMovies: (state) => {
       state.allMovies = []
@@ -186,4 +162,3 @@ export const {
 } = moviesSlice.actions
 
 export default moviesSlice.reducer
-
