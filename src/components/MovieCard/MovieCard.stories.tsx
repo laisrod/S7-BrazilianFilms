@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { BrowserRouter } from 'react-router-dom'
 import MovieCard from './MovieCard'
 
 const meta: Meta<typeof MovieCard> = {
@@ -8,6 +9,13 @@ const meta: Meta<typeof MovieCard> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    (Story) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
 }
 
 export default meta
