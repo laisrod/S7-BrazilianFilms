@@ -3,6 +3,29 @@ import { useLoginForm } from '../../hooks/useLoginForm'
 import { getFirebaseErrorMessage } from '../../utils/firebaseErrors'
 import '../../styles/Login.css'
 
+const MOVIE_POSTERS = [
+  '/image/cidadededeus.png',
+  '/image/autodacompadecida.jpg',
+  '/image/centraldobrasil.webp',
+  '/image/tropadeelite.jpg',
+  '/image/bacurau.jpg',
+  '/image/carandiru.webp',
+  '/image/aindaestouaqui.jpg',
+  '/image/quehoraselavolta.jpg',
+  '/image/opagadordepromessas.jpg',
+  '/image/donafloreseusdoismaridos.jpg',
+  '/image/lisbelaeoprisioneiro.jpg',
+  '/image/ohomemquecopiava.jpg',
+  '/image/estomago.jpg',
+  '/image/opalhaco.jpeg',
+  '/image/oagente.jpg',
+  '/image/cidadededeus.png',
+  '/image/autodacompadecida.jpg',
+  '/image/centraldobrasil.webp',
+  '/image/tropadeelite.jpg',
+  '/image/bacurau.jpg',
+]
+
 const Login = () => {
   const {
     email,
@@ -16,10 +39,22 @@ const Login = () => {
 
   return (
     <div className="login">
-      <div className="login__container">
-        <h1 className="login__title">Login</h1>
-        <p className="login__subtitle">Entre para acessar os filmes</p>
-        
+      <div className="login__mosaic">
+        {MOVIE_POSTERS.map((poster, index) => (
+          <div key={index} className="login__mosaic-item">
+            <img src={poster} alt="" className="login__mosaic-img" />
+          </div>
+        ))}
+      </div>
+
+      <div className="login__overlay" />
+
+      <div className="login__content">
+        <h1 className="login__brand">Filmes Brasileiros</h1>
+        <p className="login__tagline">
+          Descubra o melhor do cinema nacional
+        </p>
+
         {error && (
           <div className="login__error">
             {getFirebaseErrorMessage(error)}
@@ -28,13 +63,12 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="login__form">
           <div className="login__field">
-            <label htmlFor="email" className="login__label">Email</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
+              placeholder="Email"
               className="login__input"
               required
               disabled={loading}
@@ -42,13 +76,12 @@ const Login = () => {
           </div>
 
           <div className="login__field">
-            <label htmlFor="password" className="login__label">Senha</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
+              placeholder="Senha"
               className="login__input"
               required
               disabled={loading}
@@ -66,9 +99,9 @@ const Login = () => {
         </form>
 
         <p className="login__link-text">
-          Não tem conta?{' '}
+          Novo por aqui?{' '}
           <Link to="/register" className="login__link">
-            Cadastre-se
+            Cadastre-se agora
           </Link>
         </p>
       </div>
@@ -77,4 +110,3 @@ const Login = () => {
 }
 
 export default Login
-
