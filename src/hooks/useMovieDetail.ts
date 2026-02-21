@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../store/hooks'
 import { loadMovieDetails, clearCurrentMovie } from '../store/slices/moviesSlice'
 import { getMoviesByGenre, getAllMovies } from '../services/moviesService'
-import { fetchWatchProviders, searchMovieInTMDB } from '../services/tmdbService'
+import { fetchWatchProviders, searchMovieInTMDB } from '../services/moviesService'
 import { useNavigation } from './useNavigation'
 import type { Movie, TMDBWatchProvider } from '../types'
 

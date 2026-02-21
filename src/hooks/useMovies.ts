@@ -22,7 +22,7 @@ export const useMovies = () => {
 
   const initializeMovies = useCallback(() => {
     dispatch(resetMovies())
-    dispatch(loadMovies(1))
+    dispatch(loadMovies(1)) //chama função do slice
   }, [dispatch])
 
   return {
