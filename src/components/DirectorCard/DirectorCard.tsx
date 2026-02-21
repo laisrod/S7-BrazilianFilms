@@ -1,6 +1,7 @@
 import '../../styles/DirectorCard.css'
 import type { Movie } from '../../types'
 
+// componente com router
 interface DirectorCardProps {
   directorName: string
   movies: Movie[]

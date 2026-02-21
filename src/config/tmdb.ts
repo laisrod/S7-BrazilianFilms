@@ -1,9 +1,5 @@
-// Configuração da API TMDb (The Movie Database)
-// Para obter uma API key gratuita, acesse: https://www.themoviedb.org/settings/api
-
 const rawApiKey = import.meta.env.VITE_TMDB_API_KEY || ''
 
-// Valida se a API key está configurada (não é valor padrão/exemplo)
 export const TMDB_API_KEY = rawApiKey && 
   rawApiKey !== 'your_api_key_here' && 
   rawApiKey.trim().length > 0 
@@ -14,7 +10,6 @@ export const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3'
 export const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 export const TMDB_IMAGE_BASE_URL_ORIGINAL = 'https://image.tmdb.org/t/p/original'
 
-// Lista de filmes brasileiros conhecidos para buscar no TMDb
 export const BRAZILIAN_MOVIES_SEARCH_TERMS = [
   { name: 'Cidade de Deus', year: 2002 },
   { name: 'O Auto da Compadecida', year: 2000 },
@@ -30,4 +25,5 @@ export const BRAZILIAN_MOVIES_SEARCH_TERMS = [
   { name: 'Estômago', year: 2007 },
   { name: 'O Palhaço', year: 2011 },
 ]
+
 

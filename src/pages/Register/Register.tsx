@@ -3,6 +3,29 @@ import { useRegisterForm } from '../../hooks/useRegisterForm'
 import { getFirebaseErrorMessage } from '../../utils/firebaseErrors'
 import '../../styles/Register.css'
 
+const MOVIE_POSTERS = [
+  '/image/tropadeelite.jpg',
+  '/image/bacurau.jpg',
+  '/image/centraldobrasil.webp',
+  '/image/cidadededeus.png',
+  '/image/aindaestouaqui.jpg',
+  '/image/opagadordepromessas.jpg',
+  '/image/carandiru.webp',
+  '/image/quehoraselavolta.jpg',
+  '/image/autodacompadecida.jpg',
+  '/image/donafloreseusdoismaridos.jpg',
+  '/image/estomago.jpg',
+  '/image/ohomemquecopiava.jpg',
+  '/image/lisbelaeoprisioneiro.jpg',
+  '/image/opalhaco.jpeg',
+  '/image/oagente.jpg',
+  '/image/tropadeelite.jpg',
+  '/image/bacurau.jpg',
+  '/image/centraldobrasil.webp',
+  '/image/cidadededeus.png',
+  '/image/aindaestouaqui.jpg',
+]
+
 const Register = () => {
   const {
     email,
@@ -19,10 +42,22 @@ const Register = () => {
 
   return (
     <div className="register">
-      <div className="register__container">
-        <h1 className="register__title">Cadastro</h1>
-        <p className="register__subtitle">Crie sua conta para acessar os filmes</p>
-        
+      <div className="register__mosaic">
+        {MOVIE_POSTERS.map((poster, index) => (
+          <div key={index} className="register__mosaic-item">
+            <img src={poster} alt="" className="register__mosaic-img" />
+          </div>
+        ))}
+      </div>
+
+      <div className="register__overlay" />
+
+      <div className="register__content">
+        <h1 className="register__brand">Crie sua conta</h1>
+        <p className="register__tagline">
+          Junte-se e explore o cinema brasileiro
+        </p>
+
         {(error || validationError) && (
           <div className="register__error">
             {validationError || getFirebaseErrorMessage(error)}
@@ -31,13 +66,12 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="register__form">
           <div className="register__field">
-            <label htmlFor="email" className="register__label">Email</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
+              placeholder="Email"
               className="register__input"
               required
               disabled={loading}
@@ -45,13 +79,12 @@ const Register = () => {
           </div>
 
           <div className="register__field">
-            <label htmlFor="password" className="register__label">Senha</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Senha (mínimo 6 caracteres)"
               className="register__input"
               required
               disabled={loading}
@@ -60,15 +93,12 @@ const Register = () => {
           </div>
 
           <div className="register__field">
-            <label htmlFor="confirmPassword" className="register__label">
-              Confirmar Senha
-            </label>
             <input
               id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Digite a senha novamente"
+              placeholder="Confirmar senha"
               className="register__input"
               required
               disabled={loading}
@@ -97,4 +127,3 @@ const Register = () => {
 }
 
 export default Register
-

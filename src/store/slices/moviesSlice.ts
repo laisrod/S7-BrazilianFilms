@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/tool
 import { fetchMovies, fetchMovieById } from '../../services/moviesService'
 import type { Movie, MoviesState, Filters } from '../../types'
 
+//funções auxiliares
+//aplica filtros aos filmes
 const applyFilters = (movies: Movie[], filters: Filters): Movie[] => {
   let filtered = [...movies]
 
@@ -28,11 +30,14 @@ const applyFilters = (movies: Movie[], filters: Filters): Movie[] => {
   return filtered
 }
 
+//atualiza filtro e reaplica
 const updateFilterAndReapply = (state: MoviesState, filterName: keyof Filters, value: string) => {
   state.filters[filterName] = value
   state.movies = applyFilters(state.allMovies, state.filters)
 }
 
+//açoes assincronas
+//carrega filmes paginados
 export const loadMovies = createAsyncThunk(
   'movies/loadMovies',
   async (page: number = 1) => {
@@ -41,6 +46,7 @@ export const loadMovies = createAsyncThunk(
   }
 )
 
+//carrega detalhes de um filme específico
 export const loadMovieDetails = createAsyncThunk(
   'movies/loadMovieDetails',
   async (id: string | number) => {
@@ -49,6 +55,7 @@ export const loadMovieDetails = createAsyncThunk(
   }
 )
 
+//estado inicial
 const initialState: MoviesState = {
   movies: [],
   allMovies: [],
@@ -67,10 +74,13 @@ const initialState: MoviesState = {
   },
 }
 
+//redux slice
+//slice de filmes açoes sincronas
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {
+    //filtros - ações que modificam o estado
     setSearchFilter: (state, action: PayloadAction<string>) => {
       updateFilterAndReapply(state, 'search', action.payload)
     },
@@ -83,6 +93,7 @@ const moviesSlice = createSlice({
     setAwardedFilter: (state, action: PayloadAction<string>) => {
       updateFilterAndReapply(state, 'awarded', action.payload)
     },
+    //limpa filtros
     clearFilters: (state) => {
       state.filters = {
         search: '',
@@ -92,10 +103,12 @@ const moviesSlice = createSlice({
       }
       state.movies = [...state.allMovies]
     },
+    //limpa detalhes do filme
     clearCurrentMovie: (state) => {
       state.currentMovie = null
       state.errorDetails = null
     },
+    //reseta filmes
     resetMovies: (state) => {
       state.allMovies = []
       state.movies = []
@@ -111,10 +124,12 @@ const moviesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //carrega filmes paginados
       .addCase(loadMovies.pending, (state) => {
         state.loading = true
         state.error = null
       })
+      //infinite scroll
       .addCase(loadMovies.fulfilled, (state, action) => {
         state.loading = false
         
@@ -132,26 +147,30 @@ const moviesSlice = createSlice({
         state.nextPage = action.payload.next
         state.previousPage = action.payload.previous
       })
+      //carrega filmes paginados com erro
       .addCase(loadMovies.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || 'Erro ao carregar filmes'
       })
+      //carrega detalhes de um filme específico
       .addCase(loadMovieDetails.pending, (state) => {
         state.loadingDetails = true
         state.errorDetails = null
       })
-      .addCase(loadMovieDetails.fulfilled, (state, action) => {
+      .addCase(loadMovieDetails.fulfilled, (state, action) => { //carrega detalhes de um filme específico com sucesso
         state.loadingDetails = false
         state.currentMovie = action.payload
       })
-      .addCase(loadMovieDetails.rejected, (state, action) => {
+      .addCase(loadMovieDetails.rejected, (state, action) => { //carrega detalhes de um filme específico com erro
         state.loadingDetails = false
         state.errorDetails = action.error.message || 'Erro ao carregar detalhes do filme'
       })
   },
 })
 
+//exporta as acoes
 export const {
+  //acoes
   clearCurrentMovie,
   setSearchFilter,
   setGenreFilter,
@@ -161,4 +180,4 @@ export const {
   resetMovies,
 } = moviesSlice.actions
 
-export default moviesSlice.reducer
+export default moviesSlice.reducer //exporta o reducer
